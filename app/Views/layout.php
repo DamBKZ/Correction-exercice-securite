@@ -25,7 +25,7 @@
             <?php if (!empty($_SESSION['user'])): ?>
                 <span class="text-md text-gray-600">👤 <?= htmlspecialchars($_SESSION['user']['username']) ?></span>
                 <a href="<?= base_url('auth/logout') ?>" class="px-4 py-2 bg-red-500 text-white rounded-lg text-md hover:bg-red-600 transition">Déconnexion</a>
-                <?php if (!empty($_COOKIE['user_role']) && $_COOKIE['user_role'] === 'admin'): ?>
+                <?php if ($_SESSION['user']['role'] === 'admin'): ?>
                     <a href="<?= base_url('admin/dashboard') ?>" class="text-md text-purple-700 hover:text-purple-900 font-semibold">
                         Vous êtes Admin !
                     </a>
