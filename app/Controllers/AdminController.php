@@ -40,6 +40,13 @@ class AdminController extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+                set_flash('error', 'Jeton CSRF invalide. Veuillez réessayer.');
+                header(REDIRECT_HEADER . base_url('admin/create-user'));
+                exit;
+            }
+
             $username = $_POST['username'] ?? '';
             $password = $_POST['password'] ?? '';
             $role = $_POST['role'] ?? 'user';
@@ -47,6 +54,8 @@ class AdminController extends Controller
             if ($username && $password) {
                 $userModel = new User();
                 $ok = $userModel->createWithRole($username, $password, $role);
+
+                unset($_SESSION['csrf_token']);
 
                 if ($ok) {
                     set_flash('success', "Utilisateur '$username' créé avec succès !");

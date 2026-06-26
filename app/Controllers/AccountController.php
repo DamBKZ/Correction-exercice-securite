@@ -17,6 +17,12 @@ class AccountController extends Controller
             exit;
         }
 
+        if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+            set_flash('error', 'Token CSRF invalide.');
+            header(REDIRECT_HEADER . base_url());
+            exit;
+        }
+
         $currentUser = $_SESSION['user'];
 
         $id = $_GET['id'] ?? null;
@@ -35,6 +41,8 @@ class AccountController extends Controller
 
         $user = new User();
         $user->delete($id);
+
+        unset($_SESSION['csrf_token']);
 
                 if ((int)$id === (int)$currentUser['id']) {
             session_destroy();

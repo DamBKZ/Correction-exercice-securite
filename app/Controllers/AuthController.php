@@ -10,6 +10,13 @@ class AuthController extends Controller
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+                set_flash('error', 'Jeton CSRF invalide. Veuillez réessayer.');
+                header(REDIRECT_HEADER . base_url('auth/register'));
+                exit;
+            }
+
             $username = trim($_POST['username'] ?? '');
             $password = $_POST['password'] ?? '';
 
@@ -27,6 +34,8 @@ class AuthController extends Controller
 
             $user = new User();
             $user->create($username, $password);
+
+            unset($_SESSION['csrf_token']);
 
             set_flash('success', 'Inscription réussie, vous pouvez vous connecter.');
             header(REDIRECT_HEADER . base_url('auth/login'));
