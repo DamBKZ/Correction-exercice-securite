@@ -16,6 +16,13 @@ class ArticleController extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+                set_flash('error', 'Jeton CSRF invalide. Veuillez réessayer.');
+                header(REDIRECT_HEADER . base_url('article/create'));
+                exit;
+            }
+
             $title = $_POST['title'] ?? '';
             $title = escape($title); 
             $content = $_POST['content'] ?? '';
@@ -25,6 +32,9 @@ class ArticleController extends Controller
             if ($title && $content) {
                 $article = new Article();
                 $article->create($title, $content, $user_id);
+
+                unset($_POST['title'], $_POST['content']);
+
                 set_flash('success', 'Article publié avec succès !');
                 header(REDIRECT_HEADER . base_url());
                 exit;
@@ -81,7 +91,7 @@ class ArticleController extends Controller
             exit;
         }
 
-                $currentUser = $_SESSION['user'];
+        $currentUser = $_SESSION['user'];
         if ($data['user_id'] !== $currentUser['id'] && $currentUser['role'] !== 'admin') {
             set_flash('error', 'Vous ne pouvez pas modifier cet article.');
             header(REDIRECT_HEADER . base_url());
@@ -89,12 +99,22 @@ class ArticleController extends Controller
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+                set_flash('error', 'Jeton CSRF invalide. Veuillez réessayer.');
+                header(REDIRECT_HEADER . base_url('article/edit&id=' . $id));
+                exit;
+            }
+
             $title = $_POST['title'] ?? '';
             $content = $_POST['content'] ?? '';
             $title = escape($title);
             $content = escape($content);
             if ($title && $content) {
                 $article->update($id, $title, $content);
+
+                unset($_session['csrf_token']);
+                
                 set_flash('success', 'Article modifié avec succès.');
                 header(REDIRECT_HEADER . base_url('article/show&id=' . $id));
                 exit;

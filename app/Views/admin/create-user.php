@@ -1,6 +1,7 @@
 <h2 class="text-3xl font-bold mb-6">Créer un nouvel utilisateur</h2>
 
 <form method="POST" class="space-y-4 max-w-xl">
+    <input type="hidden" name="csrf_token" value="<?= generate_csrf_token(); ?>">
     <label for="username">
         <input id="username" type="text" name="username" placeholder="Nom d'utilisateur" class="w-full p-3 border rounded" required>
     </label>
