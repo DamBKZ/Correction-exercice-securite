@@ -43,3 +43,14 @@ function verify_csrf_token($token): bool
 {
     return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
+
+
+
+
+
+//Fonction pour echaper les caractères spéciaux dans une chaîne pour éviter les attaques XSS
+
+function escape($string): string
+{
+    return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}

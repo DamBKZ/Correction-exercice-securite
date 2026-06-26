@@ -2,11 +2,11 @@
 RewriteEngine On
 
 # base de réécriture = racine du site
-RewriteBase /
+RewriteBase /Correction-exercice-securite/
 
 # si la ressource demandée existe en fichier ou dossier, on la sert directement
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 # sinon, on redirige tout vers index.php en passant l'URL dans ?url=
-RewriteRule ^ index.php?url=$1 [QSA,L]
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
