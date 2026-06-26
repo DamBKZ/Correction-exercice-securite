@@ -2,7 +2,14 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sécurité Web & OWASP en pratique - Apprenez à identifier, exploiter et corriger les failles de sécurité dans une vraie application web pédagogique.">
+    <meta name="keywords" content="Sécurité Web, OWASP, Vulnérabilités, Application Web, Pédagogique, Apprentissage, Exploitation, Correction, Sécurité Informatique">
+    <meta name="author" content="Grade Julien">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <title><?= $title ?? 'Sécurité Web' ?></title>
+
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 text-gray-800">
