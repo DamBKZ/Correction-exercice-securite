@@ -5,20 +5,40 @@ namespace App\Controllers;
 use App\Core\Controller;
 
 class PageController extends Controller
+
+
+//ajout de la liste blanche
 {
-    public function show(): void
-    {
-        $page = $_GET['page'] ?? 'home';
+   public function show()
+{
+    $page = $_GET['page'] ?? 'home';
 
-        // 💥 Inclusion LFI vulnérable (aucun filtrage, pas de whitelist)
-        $file = __DIR__ . '/../Views/pages/' . $page . '.php';
+    $allowedPages = [
+        'home' => 'home',
+        'about' => 'about',
+        'mentions' => 'mentions',
+        'contact' => 'contact',
+        'admin' => 'admin',
+        'article' => 'article',
+        'apropos' => 'apropos',
+        'tools' => 'tools',
+        'search' => 'search',
+        'hash' => 'hash',
+        'create-article' => 'create',
+        'edit-article' => 'edit',
+        'login' => 'login',
+        'register' => 'register',
+        'show-article' => 'show',
+    ];
 
-        if (file_exists($file)) {
-            include_once $file;
-        } else {
-            echo "<p class='text-red-600 font-semibold'>Page non trouvée</p>";
-        }
+    if (!array_key_exists($page, $allowedPages)) {
+        set_flash('error', 'Page introuvable.');
+        header(REDIRECT_HEADER . base_url());
+        exit;
     }
+
+    $this->render('pages/' . $allowedPages[$page]);
+}
 
     public function contact(): void
     {
