@@ -17,7 +17,9 @@ class ArticleController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'] ?? '';
+            $title = escape($title); 
             $content = $_POST['content'] ?? '';
+            $content = escape($content);
             $user_id = $_SESSION['user']['id'];
 
             if ($title && $content) {
@@ -82,7 +84,8 @@ class ArticleController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'] ?? '';
             $content = $_POST['content'] ?? '';
-
+            $title = escape($title);
+            $content = escape($content);
             if ($title && $content) {
                 $article->update($id, $title, $content);
                 set_flash('success', 'Article modifié avec succès.');
