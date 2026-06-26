@@ -81,6 +81,13 @@ class ArticleController extends Controller
             exit;
         }
 
+                $currentUser = $_SESSION['user'];
+        if ($data['user_id'] !== $currentUser['id'] && $currentUser['role'] !== 'admin') {
+            set_flash('error', 'Vous ne pouvez pas modifier cet article.');
+            header(REDIRECT_HEADER . base_url());
+            exit;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'] ?? '';
             $content = $_POST['content'] ?? '';

@@ -21,9 +21,9 @@ class AdminController extends Controller
 
     public function users(): void
     {
-        if (empty($_SESSION['user'])) {
-            set_flash('error', 'Accès réservé. Connectez-vous.');
-            header(REDIRECT_HEADER . base_url('auth/login'));
+        if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            set_flash('error', 'Accès réservé aux administrateurs.');
+            header(REDIRECT_HEADER . base_url());
             exit;
         }
 
