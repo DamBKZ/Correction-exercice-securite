@@ -41,21 +41,12 @@ class Article
 
     public function search($term)
     {
-        $sql = "SELECT a.*, u.username FROM articles a 
+        $stmt = $this->db->prepare("SELECT a.*, u.username FROM articles a 
             JOIN users u ON a.user_id = u.id 
-            WHERE a.title LIKE '%$term%' OR a.content LIKE '%$term%' 
-            ORDER BY created_at DESC";
-
-        try {
-            $stmt = $this->db->query($sql);
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-                echo "<pre style='color: red; font-weight: bold'>" . $e->getMessage() . "</pre>";
-            }
-            return [];
-        }
+            WHERE a.title LIKE :term OR a.content LIKE :term 
+            ORDER BY created_at DESC");
+        $stmt->execute(['term' => "%$term%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
 
 }
